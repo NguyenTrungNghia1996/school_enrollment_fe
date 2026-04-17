@@ -8,7 +8,6 @@ export class Request {
   private baseURL: string;
 
   constructor() {
-    const unitStore = useUnitStore();
     const config = useRuntimeConfig();
 
     this.baseURL = config.public.baseURL;

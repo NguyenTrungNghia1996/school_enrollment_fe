@@ -58,34 +58,34 @@ watch(rememberMe, async () => {
 });
 const handleLogin = async () => {
   settingStore.setLoading(true);
-  try {
-    let res;
-    let navi;
-    if (unitStore.isSuperAdmin) {
-      res = await authAdmin.login({ body: JSON.stringify(form) });
-      navi = "/admin";
-    } else {
-      form.subdomain = unitStore.subdomain;
-      res = await authUnit.login({ body: JSON.stringify(form) });
-      navi = "/unit";
-    }
-    const { data, status, error } = res;
-    if (data.value?.status === "success") {
-      if (rememberMe.value) {
-        saveCredentials(form.username, form.password);
-      }
-      userStore.setUser(data.value.data);
-      await loadMenu();
-      await loadPermissions();
-      message.success("Đăng nhập thành công!");
-      await navigateTo(navi, { replace: true });
-    } else {
-      throw new Error(error.value?.data?.message);
-    }
-  } catch (error) {
-    message.error(error?.message || error?.value?.data?.message || "Đăng Nhập Thất Bại");
-  } finally {
-    settingStore.setLoading(false);
-  }
+  // try {
+  //   let res;
+  //   let navi;
+  //   if (unitStore.isSuperAdmin) {
+  //     res = await authAdmin.login({ body: JSON.stringify(form) });
+  //     navi = "/admin";
+  //   } else {
+  //     form.subdomain = unitStore.subdomain;
+  //     res = await authUnit.login({ body: JSON.stringify(form) });
+  //     navi = "/unit";
+  //   }
+  //   const { data, status, error } = res;
+  //   if (data.value?.status === "success") {
+  //     if (rememberMe.value) {
+  //       saveCredentials(form.username, form.password);
+  //     }
+  //     userStore.setUser(data.value.data);
+  //     await loadMenu();
+  //     await loadPermissions();
+  //     message.success("Đăng nhập thành công!");
+  //     await navigateTo(navi, { replace: true });
+  //   } else {
+  //     throw new Error(error.value?.data?.message);
+  //   }
+  // } catch (error) {
+  //   message.error(error?.message || error?.value?.data?.message || "Đăng Nhập Thất Bại");
+  // } finally {
+  //   settingStore.setLoading(false);
+  // }
 };
 </script>

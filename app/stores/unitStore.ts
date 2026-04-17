@@ -1,98 +1,50 @@
 import { defineStore } from "pinia";
 
 export type UnitInfo = {
-  _id?: string;
-  subdomain?: string;
-  active?: boolean;
-  logo_url?: string;
-  name?: string;
-  [key: string]: unknown;
+  name: string;
+  address: string;
+  email: string;
+  phone: string;
+  logo: string;
+  logo_full: string;
+};
+
+const DEFAULT_UNIT: UnitInfo = {
+  name: "TRƯỜNG TRUNG HỌC CƠ SỞ GIẢNG VÕ",
+  address: "1 Trần Huy Liệu, Phường Giảng Võ, TP. Hà Nội",
+  email: "c2giangvo-bd@hanoiedu.vn",
+  phone: "0246 295 6637",
+  logo: "/images/logo.png",
+  logo_full: "/images/logo_full.png",
 };
 
 type UnitState = {
-  unit: UnitInfo | null;
-  subdomain: string;
-};
-
-const DEFAULT_SUPER_ADMIN: UnitInfo = {
-  name: "Super Admin",
-  subdomain: "sa",
-  logo_url: "https://cdn.nghia196.io.vn/admin/0bb442c5-ef40-494f-ab72-a694a7cf642b-logo.png",
-};
-
-const PLACEHOLDER_LOGO = "https://image.nguyenanh-est.com/website/1745742349824_placeholder.png";
-
-const resolveSuperAdminUnit = (() => {
-  let cached: UnitInfo | null = null;
-  return (): UnitInfo => {
-    if (cached) return cached;
-    const {
-      public: { superAdminName, superAdminSubdomain, superAdminLogoUrl },
-    } = useRuntimeConfig();
-
-    cached = {
-      name: superAdminName || DEFAULT_SUPER_ADMIN.name,
-      subdomain: superAdminSubdomain || DEFAULT_SUPER_ADMIN.subdomain,
-      logo_url: superAdminLogoUrl || DEFAULT_SUPER_ADMIN.logo_url,
-    };
-    return cached;
-  };
-})();
-
-export const getSuperAdminUnit = (): UnitInfo => ({ ...resolveSuperAdminUnit() });
-
-const isSuperAdminSubdomain = (value?: string | null): boolean => {
-  const subdomain = (value ?? "").trim();
-  if (!subdomain) return false;
-  const superAdmin = resolveSuperAdminUnit();
-  return subdomain === (superAdmin.subdomain ?? DEFAULT_SUPER_ADMIN.subdomain);
+  unit: UnitInfo;
 };
 
 export const useUnitStore = defineStore("unit", {
   state: (): UnitState => ({
-    unit: null,
-    subdomain: "",
+    unit: { ...DEFAULT_UNIT },
   }),
 
   actions: {
-    setUnit(data?: UnitInfo | null) {
-      this.unit = data ?? null;
+    setUnit(data?: Partial<UnitInfo> | null) {
+      this.unit = {
+        ...DEFAULT_UNIT,
+        ...(data ?? {}),
+      };
     },
-    clearUnit() {
-      this.unit = null;
-    },
-    setSubdomain(value?: string | null) {
-      const normalized = (value ?? "").trim();
-      this.subdomain = normalized;
-
-      if (isSuperAdminSubdomain(normalized)) {
-        this.unit = getSuperAdminUnit();
-      } else if (isSuperAdminSubdomain(this.unit?.subdomain)) {
-        this.unit = null;
-      }
-    },
-    clearSubdomain() {
-      this.subdomain = "";
-      this.unit = null;
+    resetUnit() {
+      this.unit = { ...DEFAULT_UNIT };
     },
   },
 
   getters: {
-    isSuperAdmin: state => isSuperAdminSubdomain(state.subdomain),
-    // unitId: (state) => state.unit?._id || null,
-    // subdomain: (state) => state.unit?.subdomain || null,
-    // isActive: (state) => state.unit?.active === true,
-    logo: (state): string => {
-      const superAdmin = resolveSuperAdminUnit();
-      return state.unit?.logo_url || (isSuperAdminSubdomain(state.subdomain) ? superAdmin.logo_url || "" : PLACEHOLDER_LOGO);
-    },
-    name: (state): string => {
-      const superAdmin = resolveSuperAdminUnit();
-      return state.unit?.name || (isSuperAdminSubdomain(state.subdomain) ? superAdmin.name || "" : "");
-    },
+    name: state => state.unit.name,
+    address: state => state.unit.address,
+    email: state => state.unit.email,
+    phone: state => state.unit.phone,
+    logo: state => state.unit.logo,
+    logoFull: state => state.unit.logo_full,
   },
-  // persist: {
-  //   // storage: piniaPluginPersistedstate.localStorage(),
-  //   storage: piniaPluginPersistedstate.cookies(),
-  // },
 });
