@@ -37,7 +37,7 @@ export class Request {
         if (!isValid) {
           message.info("Phiên đăng nhập đã hết hạn");
           userStore.logout();
-          navigateTo("/login");
+          navigateTo("/");
           return;
         }
 
@@ -54,7 +54,7 @@ export class Request {
         if (ctx.response.status === 401) {
           message.info("Phiên đăng nhập đã hết hạn");
           userStore.logout();
-          await navigateTo("/login");
+          await navigateTo("/");
         }
 
         return ctx.response._data;
