@@ -91,12 +91,11 @@
               </div>
 
               <div class="relative z-10 mt-6 grid grid-cols-1 gap-4">
-                <button type="button" class="group flex h-12 w-full items-center justify-center gap-2 rounded-xl border-2 border-slate-100 bg-white px-4 text-sm font-bold text-slate-600 transition duration-300 hover:border-[#173b84] hover:bg-[#f8faff] hover:text-[#173b84] focus:outline-none focus:ring-2 focus:ring-[#173b84] focus:ring-offset-2" @click="authMode = authMode === 'login' ? 'register' : 'login'">
-                  <Icon :name="authMode === 'login' ? 'ant-design:user-add-outlined' : 'ant-design:login-outlined'" class="text-lg text-slate-400 transition-colors group-hover:text-[#173b84]" />
+                <a-button size="large" block @click="authMode = authMode === 'login' ? 'register' : 'login'">
                   {{ authMode === "login" ? "Tạo tài khoản mới" : "Đã có tài khoản? Đăng nhập" }}
-                </button>
+                </a-button>
                 <div class="pt-2 text-center">
-                  <button v-if="authMode === 'login'" type="button" class="inline-block text-sm font-semibold text-[#173b84] transition-colors hover:text-[#0a1e42]">Quên mật khẩu?</button>
+                  <a-button v-if="authMode === 'login'" type="link">Quên mật khẩu?</a-button>
                 </div>
               </div>
             </div>

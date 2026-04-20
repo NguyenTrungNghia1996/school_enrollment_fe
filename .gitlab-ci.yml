@@ -70,14 +70,14 @@ docker-push-dockerhub:
     - |
       TAG_LATEST="latest"
       TAG_BRANCH="$CI_COMMIT_REF_NAME-$CI_PIPELINE_ID"
-      
+
       echo "Pulling from GitLab Registry..."
       docker pull $IMAGE_NAME:$TAG_LATEST
-      
+
       echo "Tagging and Pushing to Docker Hub..."
       docker tag $IMAGE_NAME:$TAG_LATEST $DOCKER_HUB_USERNAME/$DOCKER_HUB_REPO:$TAG_LATEST
       docker tag $IMAGE_NAME:$TAG_LATEST $DOCKER_HUB_USERNAME/$DOCKER_HUB_REPO:$TAG_BRANCH
-      
+
       docker push $DOCKER_HUB_USERNAME/$DOCKER_HUB_REPO:$TAG_LATEST
       docker push $DOCKER_HUB_USERNAME/$DOCKER_HUB_REPO:$TAG_BRANCH
 
@@ -116,4 +116,4 @@ docker-deploy:
     - sudo docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
     - echo "Deploying frontend service using Docker Compose as root..."
-    - sudo bash -c "cd /root/docker/fe_timetable && docker compose pull && docker compose up -d"
+    - sudo bash -c "cd /root/docker/school_enrollment_fe && docker compose pull && docker compose up -d"
